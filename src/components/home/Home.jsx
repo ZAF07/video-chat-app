@@ -1,6 +1,6 @@
 /* eslint-disable max-len */
 /* eslint-disable no-undef */
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import io from 'socket.io-client';
 
 import styles from './home.module.css';
