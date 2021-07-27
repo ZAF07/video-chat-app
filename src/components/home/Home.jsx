@@ -56,7 +56,7 @@ function Home() {
       socket.emit('join-room', { myId: id, room });
     });
 
-    navigator.mediaDevices.getUserMedia({ video: true }).then((stream) => {
+    navigator.mediaDevices.getUserMedia({ video: true, audio: true }).then((stream) => {
       console.log('THIS IS MY STREAM -=-> ', stream);
       setMyStream(stream);
 
@@ -92,7 +92,7 @@ function Home() {
 
       <button type="button" onClick={handleJoinRoom}>Turn on camera</button>
 
-      { gotVideo && <Video stream={myStream} /> }
+      { gotVideo && <Video stream={myStream} muted /> }
 
       <div className={styles.main}>
         {userStreamsToCall && peerStreamsToCall}
