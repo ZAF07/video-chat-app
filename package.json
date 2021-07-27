@@ -5,7 +5,7 @@
   "main": "index.js",
   "proxy": "http://localhost:3000",
   "scripts": {
-    "build": "webpack --config=webpack.config.js",
+    "build": "webpack --config=webpack.dev.js",
     "dev": "nodemon server.mjs",
     "watch": "webpack --watch --config=webpack.config.js",
     "start": "node server.mjs"
