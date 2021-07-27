@@ -20,7 +20,7 @@ export function App() {
       }
 
       {
-        roomID && <a href={`http://localhost:3000/${roomID}`}>Go to room</a>
+        roomID && <a href={`https://secret-oasis-97695.herokuapp.com//${roomID}`}>Go to room</a>
       }
     </div>
   );
