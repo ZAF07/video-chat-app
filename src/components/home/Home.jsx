@@ -27,27 +27,7 @@ function Home() {
     call.on('stream', (userVideoStream) => {
       console.log('this is the user stream i need to connect to => ', userVideoStream);
       console.log('user to coneect to id => ', id);
-      // setPeersInRoom((prevState) => {
-      //   const newUserObj = { stream: userVideoStream, peerID: id };
 
-      //   if (prevState) {
-      //     for (let i = 0; i < prevState.length; i += 1) {
-      //       if (prevState[i].id === newUserObj.id) {
-      //         return [...prevState];
-      //       }
-      //       // console.log(newState);
-      //       return [...prevState, newUserObj];
-      //     }
-      //   }
-      //   return [newUserObj];
-      //   // return [];
-      //   // const newState = prevState.filter((obj) => obj !== id);
-      // });
-      // setUserStreamsToCall((prevState) => [...prevState, { stream: userVideoStream, peerID: id }]);
-      // setUserStreamsToCall((prevState) => {
-      //   console.log('setting call state', prevState);
-      //   return [...prevState, { stream: userVideoStream, peerID: id }];
-      // });
       setUserStreamsToCall((prevState) => {
         const newUserObj = { stream: userVideoStream, peerID: id };
 
@@ -62,20 +42,6 @@ function Home() {
           }
         }
         return [...prevState, newUserObj];
-      });
-    });
-
-    call.on('close', () => {
-      //  REMOVE PEER FROM ROOM
-
-    });
-
-    socket.on('user-left', ({ userLeftId }) => {
-      console.log(`${userLeftId} left room, disconnect please`);
-
-      setUserStreamsToCall((prevState) => {
-        const newState = prevState.filter((obj) => obj.peerID !== userLeftId);
-        return newState;
       });
     });
   };
@@ -97,10 +63,24 @@ function Home() {
 
       //  LISTEN FOR INCOMING CALL EVENT
       peer.on('call', (call) => {
+        //  GET ID OF PEER CALLING
+        const peerToAnswerID = call.peer;
         call.answer(stream);
         call.on('stream', (streamToAnswer) => {
           console.log('this is the user who called me, stream => ', streamToAnswer);
-          setUserStreamsToAnswer((prevState) => [...prevState, streamToAnswer]);
+          // setUserStreamsToAnswer((prevState) => [...prevState, streamToAnswer]);
+
+          setUserStreamsToAnswer((prevState) => {
+            const newUserToAnswerObj = { stream: streamToAnswer, peerID: peerToAnswerID };
+            if (prevState) {
+              for (let i = 0; i < prevState.length; i += 1) {
+                if (prevState[i].peerID === newUserToAnswerObj.peerID) {
+                  return [...prevState];
+                }
+              }
+            }
+            return [...prevState, newUserToAnswerObj];
+          });
         });
       });
 
@@ -111,6 +91,25 @@ function Home() {
 
         console.log('CALLING NEW USER --> ', newUserID);
       });
+
+      // LISTEN FOR WHEN USERS LEAVE ROOM
+      socket.on('user-left', ({ userLeftId }) => {
+        console.log(`${userLeftId} left room, disconnect please`);
+        //  LISTEN FOR WHEN USERS LEAVE ROOM
+        setUserStreamsToCall((prevState) => {
+          const newState = prevState.filter((obj) => obj.peerID !== userLeftId);
+          return newState;
+        });
+
+        //  REMOVE PEERS YOU ANSWERED CALL FROM ONCE THEY LEAVE THE ROOM
+        setUserStreamsToAnswer((prevState) => {
+          if (prevState) {
+            const newStreamAnsweredState = prevState.filter((obj) => obj.peerID !== userLeftId);
+            return newStreamAnsweredState;
+          }
+          return [];
+        });
+      });
     });
   }, []);
 
@@ -120,8 +119,8 @@ function Home() {
   };
 
   //  RENDER ALL PEER STREAMS
-  const peerStreamsToCall = userStreamsToCall.map((stream) => <Video key={stream.peerID} stream={stream.stream} />);
-  const peerStreamsToAnswer = userStreamsToAnswer.map((stream) => <Video key={Math.random()} stream={stream} />);
+  const peerStreamsToCall = userStreamsToCall.map((peer) => <Video key={peer.peerID} stream={peer.stream} />);
+  const peerStreamsToAnswer = userStreamsToAnswer.map((peer) => <Video key={peer.peerID} stream={peer.stream} />);
 
   return (
     <div>
