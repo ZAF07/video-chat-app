@@ -58,15 +58,24 @@ export function App() {
         !roomID && <Button variant="contained" color="primary" onClick={handleGetRoomId}>Get a room 😏</Button>
       }
 
-      {/* {
-        roomID && <Button startIcon={<ExitToAppTwoToneIcon />} href={`https://secret-oasis-97695.herokuapp.com/room/${roomID}`}>Go to room</Button>
-      } */}
       {
+        roomID && <Button startIcon={<ExitToAppTwoToneIcon />} href={`https://secret-oasis-97695.herokuapp.com/room/${roomID}`}>Go to room</Button>
+      }
+      {
+        roomID && (
+        <CopyToClipboard text={`https://secret-oasis-97695.herokuapp.com/room/${roomID}`} onCopy={() => setCopied(true)}>
+          <Button variant="outlined">
+            <Typography variant="body1">COPY ROOM ID</Typography>
+          </Button>
+        </CopyToClipboard>
+        )
+      }
+      {/* {
         roomID
         && <Button startIcon={<ExitToAppTwoToneIcon />} href={`http://localhost:3000/room/${roomID}`}>Go to room</Button>
-      }
+      } */}
 
-      {
+      {/* {
         roomID && (
         <CopyToClipboard text={`http://localhost:3000/room/${roomID}`} onCopy={() => setCopied(true)}>
           <Button variant="outlined">
@@ -74,7 +83,7 @@ export function App() {
           </Button>
         </CopyToClipboard>
         )
-      }
+      } */}
     </Container>
   );
 }
