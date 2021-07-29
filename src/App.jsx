@@ -19,12 +19,12 @@ export function App() {
         !roomID && <button type="button" onClick={handleGetRoomId}>Get room ID</button>
       }
 
-      {/* {
-        roomID && <a href={`https://secret-oasis-97695.herokuapp.com/room/${roomID}`}>Go to room</a>
-      } */}
       {
-        roomID && <a href={`http://localhost:3000/room/${roomID}`}>Go to room</a>
+        roomID && <a href={`https://secret-oasis-97695.herokuapp.com/room/${roomID}`}>Go to room</a>
       }
+      {/* {
+        roomID && <a href={`http://localhost:3000/room/${roomID}`}>Go to room</a>
+      } */}
     </div>
   );
 }
