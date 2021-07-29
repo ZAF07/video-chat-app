@@ -21,13 +21,48 @@ function Home() {
   const peer = new Peer();
 
   const addNewUser = (id, stream) => {
+    console.log('&&&&& Adding new user here &&&&&');
     const call = peer.call(id, stream);
 
     call.on('stream', (userVideoStream) => {
       console.log('this is the user stream i need to connect to => ', userVideoStream);
       console.log('user to coneect to id => ', id);
-      setPeersInRoom((prevState) => [...prevState, { newUserID: call }]);
-      setUserStreamsToCall((prevState) => [...prevState, { stream: userVideoStream, peerID: id }]);
+      // setPeersInRoom((prevState) => {
+      //   const newUserObj = { stream: userVideoStream, peerID: id };
+
+      //   if (prevState) {
+      //     for (let i = 0; i < prevState.length; i += 1) {
+      //       if (prevState[i].id === newUserObj.id) {
+      //         return [...prevState];
+      //       }
+      //       // console.log(newState);
+      //       return [...prevState, newUserObj];
+      //     }
+      //   }
+      //   return [newUserObj];
+      //   // return [];
+      //   // const newState = prevState.filter((obj) => obj !== id);
+      // });
+      // setUserStreamsToCall((prevState) => [...prevState, { stream: userVideoStream, peerID: id }]);
+      // setUserStreamsToCall((prevState) => {
+      //   console.log('setting call state', prevState);
+      //   return [...prevState, { stream: userVideoStream, peerID: id }];
+      // });
+      setUserStreamsToCall((prevState) => {
+        const newUserObj = { stream: userVideoStream, peerID: id };
+
+        if (prevState) {
+          console.log('previous users exits => ', prevState);
+          for (let i = 0; i < prevState.length; i += 1) {
+            console.log(prevState[i].peerID);
+            console.log(newUserObj.peerID);
+            if (prevState[i].peerID === newUserObj.peerID) {
+              return [...prevState];
+            }
+          }
+        }
+        return [...prevState, newUserObj];
+      });
     });
 
     call.on('close', () => {
@@ -71,7 +106,9 @@ function Home() {
 
       //  HANDLE EVENT WHEN A NEW USER JOINS THE ROOM
       socket.on('new-user-joined', (newUserID) => {
+        console.log('users in room array from server => ', newUserID);
         addNewUser(newUserID, stream);
+
         console.log('CALLING NEW USER --> ', newUserID);
       });
     });
@@ -84,7 +121,7 @@ function Home() {
 
   //  RENDER ALL PEER STREAMS
   const peerStreamsToCall = userStreamsToCall.map((stream) => <Video key={stream.peerID} stream={stream.stream} />);
-  const peerStreamsToAnswer = userStreamsToAnswer.map((stream) => <Video stream={stream} />);
+  const peerStreamsToAnswer = userStreamsToAnswer.map((stream) => <Video key={Math.random()} stream={stream} />);
 
   return (
     <div>

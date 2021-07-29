@@ -16,7 +16,7 @@ app.get('/', (req, res) => {
   res.sendFile(resolve('dist/main.html'));
 });
 
-app.get('/:room', (req, res) => {
+app.get('/room/:room', (req, res) => {
   console.log('in room');
   res.sendFile(resolve('dist/room.html'));
 });
@@ -31,6 +31,7 @@ io.on('connection', (socket) => {
   console.log('connected');
 
   // New user joining room sends back out thier ID and stream
+  // const usersInRoom = [];
   socket.on('join-room', ({ myId, room }) => {
     socket.join(room);
     socket.broadcast.to(room).emit('new-user-joined', myId);
