@@ -1,6 +1,7 @@
 /* eslint-disable max-len */
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
+import { Grid } from '@material-ui/core';
 import io from 'socket.io-client';
 
 import styles from './home.module.css';
@@ -119,23 +120,36 @@ function Home() {
   };
 
   //  RENDER ALL PEER STREAMS
-  const peerStreamsToCall = userStreamsToCall.map((peer) => <Video key={peer.peerID} stream={peer.stream} />);
-  const peerStreamsToAnswer = userStreamsToAnswer.map((peer) => <Video key={peer.peerID} stream={peer.stream} />);
+  const peerStreamsToCall = userStreamsToCall.map((peer) => (
+    <Grid item key={peer.peerID}>
+      <Video key={peer.peerID} stream={peer.stream} />
+    </Grid>
+
+  ));
+  const peerStreamsToAnswer = userStreamsToAnswer.map((peer) => (
+    <Grid item key={peer.peerID}>
+      <Video key={peer.peerID} stream={peer.stream} />
+    </Grid>
+  ));
 
   return (
-    <div>
+
+    <Grid container spacing={2}>
       {`my id ${myId}`}
 
       <button type="button" onClick={handleJoinRoom}>Turn on camera</button>
 
       { gotVideo && <Video stream={myStream} muted /> }
-
-      <div className={styles.main}>
+      <Grid container stream={2}>
         {userStreamsToCall && peerStreamsToCall}
         {peerStreamsToAnswer}
-      </div>
+      </Grid>
 
-    </div>
+    </Grid>
+  // {/* <div className={styles.main}>
+  //   {userStreamsToCall && peerStreamsToCall}
+  //   {peerStreamsToAnswer}
+  // </div> */}
   );
 }
 
