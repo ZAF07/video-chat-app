@@ -1,5 +1,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   AppBar, Avatar, Button, Container, Typography,
@@ -35,6 +36,7 @@ const useStyles = makeStyles((theme) => ({
 export function App() {
   const styles = useStyles();
   const [roomID, setRoomID] = useState('');
+  const [copied, setCopied] = useState(false);
 
   //  GET ROOM ID FROM SERVER
   const handleGetRoomId = () => {
@@ -53,14 +55,25 @@ export function App() {
       {roomID}
 
       {
-        !roomID && <Button variant="contained" color="primary" onClick={handleGetRoomId}>Get room ID</Button>
+        !roomID && <Button variant="contained" color="primary" onClick={handleGetRoomId}>Get a room 😏</Button>
       }
 
       {/* {
         roomID && <Button startIcon={<ExitToAppTwoToneIcon />} href={`https://secret-oasis-97695.herokuapp.com/room/${roomID}`}>Go to room</Button>
       } */}
       {
-        roomID && <Button startIcon={<ExitToAppTwoToneIcon />} href={`http://localhost:3000/room/${roomID}`}>Go to room</Button>
+        roomID
+        && <Button startIcon={<ExitToAppTwoToneIcon />} href={`http://localhost:3000/room/${roomID}`}>Go to room</Button>
+      }
+
+      {
+        roomID && (
+        <CopyToClipboard text={`http://localhost:3000/room/${roomID}`} onCopy={() => setCopied(true)}>
+          <Button variant="outlined">
+            <Typography variant="body1">COPY ROOM ID</Typography>
+          </Button>
+        </CopyToClipboard>
+        )
       }
     </Container>
   );
