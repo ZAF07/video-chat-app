@@ -17,8 +17,8 @@ const useStyles = makeStyles((theme) => ({
     marginTop: '10%',
     paddingTop: '10%',
   },
-  back: {
-    cursor: 'pointer',
+  roomInput: {
+    marginTop: '3%',
   },
   listOfPeersToAdd: {
     display: 'flex',
@@ -38,10 +38,12 @@ function InvitePeer() {
 
   const [peersToInvite, setPeersToInvite] = useState([]);
   const [peerEmail, setPeerEmail] = useState('');
+  const [roomId, setRoomId] = useState('');
 
   const handleAddPeer = () => {
     console.log('peeremail ', peerEmail);
     console.log(peersToInvite);
+    console.log(roomId);
     if (peerEmail) {
       setPeersToInvite((prevState) => [...prevState, peerEmail]);
     }
@@ -61,7 +63,20 @@ function InvitePeer() {
 
   //  HANDLE EMAIL NOTIFICATION
   const handleEmailNotif = () => {
-    axios.post('/api/email/notif', {});
+    const emailData = [];
+
+    peersToInvite.forEach((peer) => {
+      const peerToEmail = {
+        senderEmail: 'my email',
+        receiverEmail: peer,
+        roomID: roomId,
+      };
+      emailData.push(peerToEmail);
+    });
+    axios.post('/api/email/notif', { emailData });
+
+    setPeersToInvite([]);
+    window.location.href = `http://localhost:3000/room/${roomId}`;
   };
 
   const listOfPeersToAdd = peersToInvite.map((peer) => (
@@ -82,11 +97,11 @@ function InvitePeer() {
 
   return (
     <>
-      <Container className={styles.topGrid}>
+      {/* <Container className={styles.topGrid}>
         <Grid container>
           <Button href="http://localhost:3000" startIcon={<KeyboardBackspaceIcon />} />
         </Grid>
-      </Container>
+      </Container> */}
 
       <Container maxWidth="sm" className={styles.container}>
         <Grid container justifyContent="center" className={styles.grid}>
@@ -98,9 +113,9 @@ function InvitePeer() {
             <Input id="email-input" value={peerEmail} aria-describedby="my-helper-text" onChange={(e) => setPeerEmail(e.target.value)} />
             <FormHelperText id="my-helper-text">We'll never share your email.</FormHelperText>
           </FormControl>
-          <FormControl>
+          <FormControl className={styles.roomInput}>
             <InputLabel htmlFor="room-input">Room Link</InputLabel>
-            <Input id="room-input" aria-describedby="my-helper-text" />
+            <Input id="room-input" aria-describedby="my-helper-text" onChange={(e) => setRoomId(e.target.value)} />
             <FormHelperText id="my-helper-text">Enter your room URL</FormHelperText>
           </FormControl>
 
@@ -114,7 +129,7 @@ function InvitePeer() {
           <Grid container alignItems="flex-end" className={styles.listOfPeersToAdd}>
             {listOfPeersToAdd}
           </Grid>
-          <Button fullWidth onClick={handleEmailNotif}>Confirm</Button>
+          <Button variant="outlined" fullWidth onClick={handleEmailNotif}>Confirm</Button>
         </Container>
         )}
 

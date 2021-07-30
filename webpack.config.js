@@ -7,7 +7,6 @@ module.exports = {
   entry: {
     main: path.resolve(__dirname, 'src/index.jsx'),
     room: path.resolve(__dirname, 'src/room.jsx'),
-    invite: path.resolve(__dirname, 'src/invite.jsx'),
   },
   mode: 'development',
   output: {
@@ -66,10 +65,6 @@ module.exports = {
       filename: 'room.html',
       chunks: ['room'],
     }),
-    new HtmlWebpackPlugin({
-      template: 'src/invite.html',
-      filename: 'invite.html',
-      chunks: ['invite'],
-    }),
+
   ],
 };

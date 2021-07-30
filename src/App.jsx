@@ -3,10 +3,12 @@ import React, { useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { makeStyles } from '@material-ui/core/styles';
 import {
-  AppBar, Avatar, Button, Container, Typography,
+  AppBar, Avatar, Button, Container, Typography, Grid,
 } from '@material-ui/core';
+import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import ExitToAppTwoToneIcon from '@material-ui/icons/ExitToAppTwoTone';
 
+import InvitePeer from './InvitePeer';
 import logo from './zlogo.png';
 
 const useStyles = makeStyles((theme) => ({
@@ -49,6 +51,15 @@ export function App() {
       <AppBar color="primary" className={styles.appBar}>
         <Avatar alt="logo" src={logo} className={styles.logo} />
       </AppBar>
+
+      {roomID && (
+      <Container className={styles.topGrid}>
+        <Grid container>
+          <Button href="http://localhost:3000" startIcon={<KeyboardBackspaceIcon />} />
+        </Grid>
+      </Container>
+      )}
+
       <Typography variant="h2" align="center" color="textSecondary" gutterBottom>
         Start making calls
       </Typography>
@@ -63,13 +74,15 @@ export function App() {
       }
       {
         roomID && (
-        <CopyToClipboard text={`https://secret-oasis-97695.herokuapp.com/room/${roomID}`} onCopy={() => setCopied(true)}>
+        <CopyToClipboard text={roomID} onCopy={() => setCopied(true)}>
           <Button variant="outlined">
             <Typography variant="body1">COPY ROOM ID</Typography>
           </Button>
         </CopyToClipboard>
         )
       }
+      {roomID && <InvitePeer />}
+
       {/* {
         roomID
         && <Button startIcon={<ExitToAppTwoToneIcon />} href={`http://localhost:3000/room/${roomID}`}>Go to room</Button>

@@ -5,12 +5,15 @@ import { v4 } from 'uuid';
 import { resolve } from 'path';
 import {} from 'dotenv/config';
 
+import { emailNotification } from './utils/mail.mjs';
+
 const app = express();
 const httpServer = createServer(app);
 const io = new Server(httpServer);
 const uuidPath = v4;
 
 app.use(express.static('dist'));
+app.use(express.json());
 
 app.get('/', (req, res) => {
   console.log('in lobby');
@@ -31,6 +34,17 @@ app.get('/api/get-room', (req, res) => {
   const roomPath = uuidPath();
   res.json(roomPath);
   // res.sendFile('index.html')
+});
+
+app.post('/api/email/notif', (req, res) => {
+  const { emailData: peersToEmailData } = req.body;
+  console.log(peersToEmailData);
+
+  peersToEmailData.forEach((peerData) => {
+    console.log(peerData.roomID);
+    console.log(peerData.receiverEmail);
+    emailNotification('r18711@hotmail.com', peerData.receiverEmail, peerData.roomID);
+  });
 });
 
 io.on('connection', (socket) => {
