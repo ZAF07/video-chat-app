@@ -1,4 +1,4 @@
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {
   Card, CardActionArea, CardMedia, Container, Typography,
@@ -31,11 +31,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Video(props) {
+  const [muteAudio, setMuteAudio] = useState(false);
   const styles = useStyles();
-  const { stream } = props;
+  const { stream, muteMe } = props;
   const s = useRef();
 
   useEffect(() => {
+    muteMe ? setMuteAudio(true) : setMuteAudio(false);
+
     s.current.srcObject = stream;
   }, [props]);
 
@@ -44,7 +47,7 @@ function Video(props) {
 
       <Card>
         <CardActionArea>
-          <CardMedia component="video" ref={s} playsInline autoPlay />
+          <CardMedia component="video" ref={s} playsInline autoPlay muted={muteAudio} />
         </CardActionArea>
       </Card>
 

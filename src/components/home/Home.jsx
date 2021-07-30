@@ -139,7 +139,7 @@ function Home() {
 
       <button type="button" onClick={handleJoinRoom}>Turn on camera</button>
 
-      { gotVideo && <Video stream={myStream} muted /> }
+      { gotVideo && <Video stream={myStream} muteAudio /> }
       <Grid container stream={2}>
         {userStreamsToCall && peerStreamsToCall}
         {peerStreamsToAnswer}

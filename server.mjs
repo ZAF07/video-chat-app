@@ -3,6 +3,7 @@ import { createServer } from 'http';
 import { Server } from 'socket.io';
 import { v4 } from 'uuid';
 import { resolve } from 'path';
+import {} from 'dotenv/config';
 
 const app = express();
 const httpServer = createServer(app);
@@ -14,6 +15,11 @@ app.use(express.static('dist'));
 app.get('/', (req, res) => {
   console.log('in lobby');
   res.sendFile(resolve('dist/main.html'));
+});
+
+app.get('/invite/peers', (req, res) => {
+  console.log('invite peers');
+  res.sendFile(resolve('dist/invite.html'));
 });
 
 app.get('/room/:room', (req, res) => {
