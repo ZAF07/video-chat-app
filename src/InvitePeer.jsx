@@ -125,7 +125,7 @@ function InvitePeer() {
           <FormControl className={styles.roomInput}>
             <InputLabel htmlFor="room-input">Room ID</InputLabel>
             <Input id="room-input" aria-describedby="my-helper-text" onChange={(e) => setRoomId(e.target.value)} />
-            <FormHelperText id="my-helper-text">Paste your room URL</FormHelperText>
+            <FormHelperText id="my-helper-text">Paste your room ID</FormHelperText>
           </FormControl>
 
           <Button onClick={handleAddPeer}>Add Peer</Button>
