@@ -115,9 +115,7 @@ function Home() {
   }, []);
 
   //  SEND MY ID ALONG WITH JOINING THE ROOM
-  const handleJoinRoom = () => {
-    setGotVideo(true);
-  };
+  const handleJoinRoom = () => (gotVideo ? setGotVideo(false) : setGotVideo(true));
 
   //  RENDER ALL PEER STREAMS
   const peerStreamsToCall = userStreamsToCall.map((peer) => (
@@ -139,7 +137,7 @@ function Home() {
 
       <button type="button" onClick={handleJoinRoom}>Turn on camera</button>
 
-      { gotVideo && <Video stream={myStream} muteAudio /> }
+      { gotVideo && <Video stream={myStream} muteMe /> }
       <Grid container stream={2}>
         {userStreamsToCall && peerStreamsToCall}
         {peerStreamsToAnswer}
