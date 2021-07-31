@@ -1,9 +1,18 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import {
-  Grid, FormControl, FormHelperText, InputLabel, Input, Typography, Container, Button, FormControlLabel, Checkbox, FormGroup,
+  Grid,
+  FormControl,
+  FormHelperText,
+  InputLabel,
+  Input,
+  Typography,
+  Container,
+  Button,
+  FormControlLabel,
+  Checkbox,
+  FormGroup,
 } from '@material-ui/core';
-import KeyboardBackspaceIcon from '@material-ui/icons/KeyboardBackspace';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
 import { makeStyles } from '@material-ui/core/styles';
@@ -114,9 +123,9 @@ function InvitePeer() {
             <FormHelperText id="my-helper-text">We'll never share your email.</FormHelperText>
           </FormControl>
           <FormControl className={styles.roomInput}>
-            <InputLabel htmlFor="room-input">Room Link</InputLabel>
+            <InputLabel htmlFor="room-input">Room ID</InputLabel>
             <Input id="room-input" aria-describedby="my-helper-text" onChange={(e) => setRoomId(e.target.value)} />
-            <FormHelperText id="my-helper-text">Enter your room URL</FormHelperText>
+            <FormHelperText id="my-helper-text">Paste your room URL</FormHelperText>
           </FormControl>
 
           <Button onClick={handleAddPeer}>Add Peer</Button>
