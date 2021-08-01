@@ -143,14 +143,14 @@ function Home() {
 
   return (
     <Container className={styles.container}>
-      <Grid container spacing={2} justifyContent="center">
+      <Grid container spacing={2} justifyContent="flex-start">
         {`my id ${myId}`}
 
         <button type="button" onClick={handleJoinRoom}>Turn on camera</button>
 
-        <Grid container stream={2}>
+        <Grid container stream={2} justifyContent="flex-start">
           { gotVideo && (
-          <Grid item xs={4}>
+          <Grid item xs={12} md={4}>
             <Video stream={myStream} muteMe />
           </Grid>
           )}
