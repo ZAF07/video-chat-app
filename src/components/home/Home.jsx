@@ -5,7 +5,7 @@ import { Grid, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
 import io from 'socket.io-client';
 
-import styles from './home.module.css';
+import Drawer from '../Drawer';
 import Video from '../video/Video';
 
 const socket = io();
@@ -163,7 +163,9 @@ function Home() {
       <Grid container justifyContent="flex-end">
         hello
       </Grid>
+      <Drawer />
     </Container>
+
   // {/* <div className={styles.main}>
   //   {userStreamsToCall && peerStreamsToCall}
   //   {peerStreamsToAnswer}

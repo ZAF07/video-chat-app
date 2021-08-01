@@ -11,7 +11,8 @@ import {
   Button,
   FormControlLabel,
   Checkbox,
-  FormGroup,
+  List,
+  ListItem,
 } from '@material-ui/core';
 import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@material-ui/icons/CheckBox';
@@ -89,19 +90,22 @@ function InvitePeer() {
   };
 
   const listOfPeersToAdd = peersToInvite.map((peer) => (
-    <FormControlLabel
-      key={peer}
-      control={(
-        <Checkbox
-          icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
-          checkedIcon={<CheckBoxIcon fontSize="small" />}
-          name="checkedI"
-          checked
-          onChange={() => handleChecked(peer)}
-        />
+    <ListItem>
+      <FormControlLabel
+        key={peer}
+        control={(
+          <Checkbox
+            icon={<CheckBoxOutlineBlankIcon fontSize="small" />}
+            checkedIcon={<CheckBoxIcon fontSize="small" />}
+            name="checkedI"
+            checked
+            onChange={() => handleChecked(peer)}
+          />
         )}
-      label={peer}
-    />
+        label={peer}
+      />
+    </ListItem>
+
   ));
 
   return (
@@ -136,7 +140,11 @@ function InvitePeer() {
         <Container className={styles.listContainer}>
           <Typography align="center">My Friends</Typography>
           <Grid container alignItems="flex-end" className={styles.listOfPeersToAdd}>
-            {listOfPeersToAdd}
+
+            <List>
+              {listOfPeersToAdd}
+            </List>
+
           </Grid>
           <Button variant="outlined" fullWidth onClick={handleEmailNotif}>Confirm</Button>
         </Container>
