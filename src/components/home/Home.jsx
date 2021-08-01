@@ -1,7 +1,8 @@
 /* eslint-disable max-len */
 /* eslint-disable no-undef */
 import React, { useState, useEffect } from 'react';
-import { Grid } from '@material-ui/core';
+import { Grid, Container } from '@material-ui/core';
+import { makeStyles } from '@material-ui/core/styles';
 import io from 'socket.io-client';
 
 import styles from './home.module.css';
@@ -9,7 +10,17 @@ import Video from '../video/Video';
 
 const socket = io();
 
+const useStyles = makeStyles((theme) => ({
+  container: {
+    display: 'flex',
+    flexDirection: 'row',
+    height: '100%',
+  },
+}));
+
 function Home() {
+  const styles = useStyles();
+
   const [myId, setMyId] = useState(null);
   const [room, setRoom] = useState(null);
   const [myStream, setMyStream] = useState();
@@ -119,31 +130,40 @@ function Home() {
 
   //  RENDER ALL PEER STREAMS
   const peerStreamsToCall = userStreamsToCall.map((peer) => (
-    <Grid item key={peer.peerID}>
+    <Grid item xs={4} key={peer.peerID}>
       <Video key={peer.peerID} stream={peer.stream} />
     </Grid>
 
   ));
   const peerStreamsToAnswer = userStreamsToAnswer.map((peer) => (
-    <Grid item key={peer.peerID}>
+    <Grid item xs={4} key={peer.peerID}>
       <Video key={peer.peerID} stream={peer.stream} />
     </Grid>
   ));
 
   return (
+    <Container className={styles.container}>
+      <Grid container spacing={2} justifyContent="center">
+        {`my id ${myId}`}
 
-    <Grid container spacing={2}>
-      {`my id ${myId}`}
+        <button type="button" onClick={handleJoinRoom}>Turn on camera</button>
 
-      <button type="button" onClick={handleJoinRoom}>Turn on camera</button>
+        <Grid container stream={2}>
+          { gotVideo && (
+          <Grid item xs={4}>
+            <Video stream={myStream} muteMe />
+          </Grid>
+          )}
+          {userStreamsToCall && peerStreamsToCall}
+          {peerStreamsToAnswer}
+        </Grid>
 
-      { gotVideo && <Video stream={myStream} muteMe /> }
-      <Grid container stream={2}>
-        {userStreamsToCall && peerStreamsToCall}
-        {peerStreamsToAnswer}
       </Grid>
 
-    </Grid>
+      <Grid container justifyContent="flex-end">
+        hello
+      </Grid>
+    </Container>
   // {/* <div className={styles.main}>
   //   {userStreamsToCall && peerStreamsToCall}
   //   {peerStreamsToAnswer}

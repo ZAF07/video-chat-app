@@ -24,15 +24,17 @@ const useStyles = makeStyles((theme) => ({
     paddingTop: '.5%',
     paddingBottom: '.5%',
   },
-  move: {
-    marginLeft: '10%',
-    padding: '3%',
+  video: {
+    width: '100%',
+    height: '100%',
   },
 }));
 
 function Video(props) {
-  const [muteAudio, setMuteAudio] = useState(false);
   const styles = useStyles();
+
+  const [muteAudio, setMuteAudio] = useState(false);
+
   const { stream, muteMe } = props;
   const s = useRef();
 
@@ -43,18 +45,15 @@ function Video(props) {
   }, [props]);
 
   return (
-    <Container className={styles.container}>
+  // <Container className={styles.container}>
 
-      <Card>
-        <CardActionArea>
-          <CardMedia component="video" ref={s} playsInline autoPlay muted={muteAudio} />
-        </CardActionArea>
-      </Card>
+    <Card>
+      <CardActionArea>
+        <CardMedia className={styles.video} controls component="video" ref={s} playsInline autoPlay muted={muteAudio} />
+      </CardActionArea>
+    </Card>
 
-      {/* The video
-
-      <video ref={s} playsInline autoPlay /> */}
-    </Container>
+  // </Container>
   );
 }
 
