@@ -61,6 +61,9 @@ function Home() {
   useEffect(() => {
     setRoom(location.pathname);
 
+    //  GET MY DATA
+    console.log(document.cookie.split('=')[1]);
+
     // GET MY PEER ID
     peer.on('open', (id) => {
       console.log(id);
