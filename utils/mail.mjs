@@ -12,7 +12,7 @@ export const emailNotification = async (senderEmail, receiverEmail, roomID) => {
   });
   const info = await transporter.sendMail({
     from: 'Call your peer 📞 <peersingapore@outlook.com> ',
-    to: 'zaffere07@gmail.com',
+    to: `${receiverEmail}`,
     subject: `You have a call scheduled with ${senderEmail}`,
     text: `${senderEmail} has invited you to a video call`,
     html: `<b> You have a scheduled video call with ${senderEmail}

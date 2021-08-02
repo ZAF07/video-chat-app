@@ -44,6 +44,30 @@ app.get('/api/get-room', (req, res) => {
   // res.sendFile('index.html')
 });
 
+// CHECK IF USER ALREADY ENTERED NAME AND EMAIL
+app.get('/api/user', (req, res) => {
+  if (req.cookies.userID) {
+    console.log('this are the user deets => ', req.cookies);
+    res.json(req.cookies);
+  } else {
+    res.json(null);
+  }
+});
+
+// GET USER DATA (LOGGED IN)
+app.post('/api/get-user', async (req, res) => {
+  const { userId } = req.body;
+  console.log('This is id -> ', userId);
+  try {
+    const userDataLoggedIn = await User.find({ _id: userId });
+    console.log('was hsi we ==> ', userDataLoggedIn);
+    res.json(userDataLoggedIn[0]);
+  } catch (err) {
+    console.log(err.message);
+    res.json({ message: 'error getting user data logged in', error: err.message });
+  }
+});
+
 // API CREATE NEW USER
 app.post('/api/create-new-user', async (req, res) => {
   const user = req.body;
@@ -52,7 +76,9 @@ app.post('/api/create-new-user', async (req, res) => {
 
   try {
     await newUser.save(user);
-    res.cookie('name', newUser.name);
+    const cookieOpts = { maxAge: 2 * 60 * 60 * 1000 };
+    res.cookie('userID', newUser.id, { cookieOpts });
+    console.log(newUser);
     res.json(newUser);
   } catch (err) {
     res.json({ message: 'failed to save new user', error: err.message });
@@ -67,7 +93,7 @@ app.post('/api/email/notif', (req, res) => {
   peersToEmailData.forEach((peerData) => {
     console.log(peerData.roomID);
     console.log(peerData.receiverEmail);
-    emailNotification('r18711@hotmail.com', peerData.receiverEmail, peerData.roomID);
+    emailNotification(peerData.senderEmail, peerData.receiverEmail, peerData.roomID);
   });
 });
 

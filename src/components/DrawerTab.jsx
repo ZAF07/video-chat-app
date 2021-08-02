@@ -20,7 +20,7 @@ const useStyles = makeStyles({
   },
 });
 
-export default function TemporaryDrawer() {
+function DrawerTab(props) {
   const classes = useStyles();
   const [state, setState] = React.useState({
     top: false,
@@ -28,6 +28,8 @@ export default function TemporaryDrawer() {
     bottom: false,
     right: false,
   });
+
+  const { userEmail } = props;
 
   const toggleDrawer = (anchor, open) => (event) => {
     if (event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
@@ -44,10 +46,11 @@ export default function TemporaryDrawer() {
           <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button>
           <Drawer anchor="right" open={state[anchor]} onClose={toggleDrawer(anchor, false)}>
             {/* {list(anchor)} */}
-            <InvitePeer />
+            <InvitePeer userEmail={userEmail} />
           </Drawer>
         </React.Fragment>
       ))}
     </div>
   );
 }
+export default DrawerTab;

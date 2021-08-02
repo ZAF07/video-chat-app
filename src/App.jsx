@@ -1,5 +1,6 @@
+/* eslint-disable no-underscore-dangle */
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { makeStyles } from '@material-ui/core/styles';
 import {
@@ -43,6 +44,9 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: '10%',
     padding: '3%',
   },
+  greet: {
+    marginBottom: '5%',
+  },
 }));
 
 export function App() {
@@ -50,29 +54,46 @@ export function App() {
   const [roomID, setRoomID] = useState('');
   const [copied, setCopied] = useState(false);
   const [user, setUser] = useState(null);
+  const [userID, setUserID] = useState(null);
   const [email, setEmail] = useState(null);
 
-  // //  CREATE NEW USER
-  // const handleCreateNewUser = () => {
-  //   axios.post('/api/create-new-user', { name: user, email })
-  //     .then(returnedUser => {
-  //       log
-  //     })
-  // };
+  useEffect(() => {
+    // RESTORE USER INFO AFTER REFRESH
+    if (!userID) {
+      axios.get('/api/user')
+        .then((userData) => {
+          console.log(userData);
+          const { data } = userData;
+          if (data) {
+            console.log(data.userID);
+            // Set ID first
+            setUserID(data.userID);
+            axios.post('/api/get-user', { userId: data.userID })
+              .then((returnedUserData) => {
+                //  GOT THE LOGGED IN USER DATA
+                const { data: loggedInUserData } = returnedUserData;
+                console.log(loggedInUserData);
+                //  SET NAME AND EMAIL
+                setUser(loggedInUserData.name);
+                setEmail(loggedInUserData.email);
+              });
+          }
+        });
+    }
+  }, []);
 
-  //  SET USER WITHOUT DB
+  //  SETUP NEW USER WITHOUT
   const handleUserIdentity = (name, email) => {
     console.log(name, email);
     axios.post('/api/create-new-user', { name, email })
       .then((returnedUser) => {
         const { data } = returnedUser;
+        // SET REQUIRED STATES
+        setUserID(data._id);
+        setEmail(data.email);
         setUser(data.name);
-        setEmail(data.name);
         console.log(returnedUser);
       });
-
-    //  SEND USER DATA TO USER ON DIFF URL
-    socket.emit('my-data', { user, email });
   };
 
   //  GET ROOM ID FROM SERVER
@@ -84,8 +105,7 @@ export function App() {
 
   //  RENDER FORM ONLY IF USER STATE !EXISTS
   const enterIdentity = (
-    !user
-    && (
+    !userID && !user && (
     <>
       <Typography variant="h3">
         Hello there 😎
@@ -99,10 +119,21 @@ export function App() {
 
   );
 
-  //  RENDER 'GET ROOM ID' ONLY IF USER STATE EXISTS
+  //  RENDER 'GET ROOM ID' ONLY IF USER AND USERID STATE EXISTS
   const getRoom = (
-    user
-    && <Button variant="contained" color="primary" onClick={handleGetRoomId}>Get a room 😏</Button>
+    user && userID
+    && (
+      <>
+        <Typography variant="h4" className={styles.greet}>
+          Hello
+          {' '}
+          {user}
+
+          👋
+        </Typography>
+        <Button variant="contained" color="primary" onClick={handleGetRoomId}>Get a room 😏</Button>
+      </>
+    )
   );
 
   // RENDER THESE ELEMENTS ONLY WHEN WE HAVE A ROOM ID
@@ -117,7 +148,7 @@ export function App() {
           <Typography variant="body1">COPY ROOM ID</Typography>
         </Button>
       </CopyToClipboard>
-      <InvitePeer />
+      <InvitePeer userEmail={email} />
     </>
     )
 

@@ -3,9 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import { Grid, Container } from '@material-ui/core';
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios';
 import io from 'socket.io-client';
 
-import Drawer from '../Drawer';
+import DrawerTab from '../DrawerTab';
 import Video from '../video/Video';
 
 const socket = io();
@@ -22,6 +23,9 @@ function Home() {
   const styles = useStyles();
 
   const [myId, setMyId] = useState(null);
+  const [userID, setUserID] = useState(null);
+  const [user, setUser] = useState(null);
+  const [email, setEmail] = useState(null);
   const [room, setRoom] = useState(null);
   const [myStream, setMyStream] = useState();
   const [gotVideo, setGotVideo] = useState(false);
@@ -59,10 +63,29 @@ function Home() {
   };
 
   useEffect(() => {
-    setRoom(location.pathname);
+    // CHECK IF USER ALREADY SIGNED IN
 
-    //  GET MY DATA
-    console.log(document.cookie.split('=')[1]);
+    if (!userID) {
+      axios.get('/api/user')
+        .then((userData) => {
+          console.log(userData);
+          const { data } = userData;
+          if (data) {
+            console.log(data.userID);
+            // Set ID first
+            setUserID(data.userID);
+            axios.post('/api/get-user', { userId: data.userID })
+              .then((returnedUserData) => {
+                //  GOT THE LOGGED IN USER DATA
+                const { data: loggedInUserData } = returnedUserData;
+                console.log(loggedInUserData);
+                //  SET NAME AND EMAIL
+                setUser(loggedInUserData.name);
+                setEmail(loggedInUserData.email);
+              });
+          }
+        });
+    }
 
     // GET MY PEER ID
     peer.on('open', (id) => {
@@ -166,7 +189,7 @@ function Home() {
       <Grid container justifyContent="flex-end">
         hello
       </Grid>
-      <Drawer />
+      <DrawerTab userEmail={email} roomId={room} />
     </Container>
 
   // {/* <div className={styles.main}>

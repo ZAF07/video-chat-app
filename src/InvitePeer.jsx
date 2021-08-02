@@ -43,8 +43,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function InvitePeer() {
+function InvitePeer(props) {
   const styles = useStyles();
+
+  const { userEmail } = props;
 
   const [peersToInvite, setPeersToInvite] = useState([]);
   const [peerEmail, setPeerEmail] = useState('');
@@ -77,7 +79,7 @@ function InvitePeer() {
 
     peersToInvite.forEach((peer) => {
       const peerToEmail = {
-        senderEmail: 'my email',
+        senderEmail: userEmail,
         receiverEmail: peer,
         roomID: roomId,
       };
@@ -90,7 +92,7 @@ function InvitePeer() {
   };
 
   const listOfPeersToAdd = peersToInvite.map((peer) => (
-    <ListItem>
+    <ListItem key={peer}>
       <FormControlLabel
         key={peer}
         control={(
