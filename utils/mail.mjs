@@ -6,8 +6,8 @@ export const emailNotification = async (senderEmail, receiverEmail, roomID) => {
   const transporter = nodeMailer.createTransport({
     service: 'outlook',
     auth: {
-      user: 'peersingapore@outlook.com',
-      pass: 'peer__8382209-9438-77&^78',
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS,
     },
   });
   const info = await transporter.sendMail({
