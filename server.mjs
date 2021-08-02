@@ -71,7 +71,7 @@ app.post('/api/get-user', async (req, res) => {
 // API CREATE NEW USER
 app.post('/api/create-new-user', async (req, res) => {
   const user = req.body;
-
+  console.log('running create new user');
   const newUser = new User(user);
 
   try {
