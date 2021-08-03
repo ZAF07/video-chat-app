@@ -22,6 +22,7 @@ import ExitToAppTwoToneIcon from '@material-ui/icons/ExitToAppTwoTone';
 
 import logo from './zlogo.png';
 import dogs from './dogs.jpg';
+import connect from './connect.jpg';
 import InvitePeer from './InvitePeer';
 import UserForm from './components/form/UserForm';
 
@@ -156,7 +157,7 @@ export function App() {
   const headers = headerList.map((word) => (
     !roomID && user
     && (
-    <Grid container>
+    <Grid container key={word}>
       <Grid item xs={12}>
         <List>
           <ListItem>
@@ -168,9 +169,13 @@ export function App() {
         </List>
       </Grid>
     </Grid>
-
     )
   ));
+
+  //  HEADER IMG
+  const headerImg = (!roomID && user
+  && <img className={styles.dog} src={connect} alt="connect img" />
+  );
 
   //  SHOW GET ROOM Button
   const getRoomBtn = (!roomID && user
@@ -265,7 +270,9 @@ export function App() {
             {greetUser}
             {getRoomBtn}
           </Grid>
+
           {headers}
+          {headerImg}
 
           {elemsAfterRoomId}
         </Grid>
