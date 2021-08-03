@@ -24,8 +24,8 @@ const useStyles = makeStyles((theme) => ({
     flexDirection: 'column',
   },
   container: {
-    marginTop: '10%',
-    paddingTop: '10%',
+    marginTop: '5%',
+    paddingTop: '5%',
   },
   roomInput: {
     marginTop: '3%',
@@ -118,7 +118,7 @@ function InvitePeer(props) {
         </Grid>
       </Container> */}
 
-      <Container maxWidth="sm" className={styles.container}>
+      <Container maxWidth="lg" className={styles.container}>
         <Grid container justifyContent="center" className={styles.grid}>
           <Typography align="center">
             Invite your friends
@@ -134,7 +134,7 @@ function InvitePeer(props) {
             <FormHelperText id="my-helper-text">Paste your room ID</FormHelperText>
           </FormControl>
 
-          <Button onClick={handleAddPeer}>Add Peer</Button>
+          <Button variant="contained" onClick={handleAddPeer}>Add Peer</Button>
         </Grid>
 
         { peersToInvite.length > 0
