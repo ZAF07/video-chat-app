@@ -7,6 +7,7 @@ import cookieParser from 'cookie-parser';
 import mongoose from 'mongoose';
 import {} from 'dotenv/config';
 import User from './models/user.mjs';
+import Chat from './models/chat.mjs';
 
 import { emailNotification } from './utils/mail.mjs';
 
@@ -52,6 +53,27 @@ app.get('/api/user', (req, res) => {
   } else {
     res.json(null);
   }
+});
+//  API GET CHATS
+app.get('/api/chat', (req, res) => {
+  console.log('api chat');
+  // Chat.find({}, (err, data) => {
+  //   if (err) {
+  //     res.json({ message: 'failed to get chats data', error: err });
+  //   } else {
+  //     console.log('chat received -> ', data);
+  //     res.json(data);
+  //   }
+  // });
+
+  Chat.find({}).sort({ _id: -1 }).exec((err, data) => {
+    if (err) {
+      res.json({ message: 'failed to get chats data', error: err });
+    } else {
+      console.log('chat received -> ', data);
+      res.json(data);
+    }
+  });
 });
 
 // GET USER DATA (LOGGED IN)
@@ -109,6 +131,15 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
       socket.broadcast.to(room).emit('user-left', { userLeftId: myId });
     });
+  });
+
+  //  CHAT
+  socket.on('send-text-chat', ({ userName, text, room }) => {
+    console.log('received chat -> ', userName, text);
+    const newChatMsg = new Chat({ name: userName, text });
+    newChatMsg.save(newChatMsg);
+
+    socket.broadcast.to(room).emit('receive-text-chat', { userName, text });
   });
 });
 
